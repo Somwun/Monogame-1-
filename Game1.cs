@@ -16,6 +16,8 @@ namespace Monogame___1_
         private Texture2D _dino5;
         private SpriteFont _text;
         private Texture2D _window;
+        private bool visible = true;
+        private int backgroundImage;
         Random generator = new Random();
         private Vector2 random;
         public Game1()
@@ -40,7 +42,11 @@ namespace Monogame___1_
             _dino3 = Content.Load<Texture2D>("Dinosaur3 (1)");
             _dino4 = Content.Load<Texture2D>("Dinosaur4 (1)");
             _text = Content.Load<SpriteFont>("TextFont");
-            _window = Content.Load<Texture2D>("4PanelWindow (1)");
+            backgroundImage = generator.Next(1,3);
+            if (backgroundImage == 1)
+                _window = Content.Load<Texture2D>("4PanelWindow (1)");
+            else
+                _window = Content.Load<Texture2D>("4PanelWindow2 (1)");
             random = new Vector2(generator.Next(60, 61), generator.Next(35, 36));
         }
         protected override void Update(GameTime gameTime)
@@ -50,8 +56,13 @@ namespace Monogame___1_
             if (Keyboard.GetState().IsKeyDown(Keys.R))
             {
                 random = new Vector2(generator.Next(0, 500), generator.Next(0, 400));
+                visible = false;
             }
-
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                random = new Vector2(generator.Next(0, 500), generator.Next(0, 400));
+                visible = false;
+            }
             base.Update(gameTime);
         }
         protected override void Draw(GameTime gameTime)
@@ -63,7 +74,8 @@ namespace Monogame___1_
             _spriteBatch.Draw(_dino3, new Vector2(440, 40), Color.White);
             _spriteBatch.Draw(_dino4, new Vector2(46, 375), Color.White);
             _spriteBatch.Draw(_dino, random, Color.White);
-            _text = Content.Load<SpriteFont>("TextFont");
+            if (visible)
+                _spriteBatch.DrawString(_text, "Press R to randomize one of the Dinosaurs", new Vector2(90, 0), Color.Black);
             _spriteBatch.End();
 
             base.Draw(gameTime);
