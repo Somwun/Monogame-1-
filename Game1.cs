@@ -13,14 +13,13 @@ namespace Monogame___1_
         private Texture2D _dino2;
         private Texture2D _dino3;
         private Texture2D _dino4;
-        private Texture2D _dino5;
         private SpriteFont _text;
         private Texture2D _window;
         private bool visible = true, update = true;
         private KeyboardState previousState, keyboardState;
-        private int backgroundImage;
+        private Vector2 dino1, dino2, dino3, dino4;
+        private int backgroundImage, randomDino;
         Random generator = new Random();
-        private Vector2 random;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -37,6 +36,7 @@ namespace Monogame___1_
         }
         protected override void LoadContent()
         {
+            randomDino = generator.Next(1,5);
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _dino = Content.Load<Texture2D>("Dinosaur (1)");
             _dino2 = Content.Load<Texture2D>("Dinosaur2 (1)");
@@ -48,15 +48,37 @@ namespace Monogame___1_
                 _window = Content.Load<Texture2D>("4PanelWindow (1)");
             else
                 _window = Content.Load<Texture2D>("4PanelWindow2 (1)");
-            random = new Vector2(generator.Next(60, 61), generator.Next(35, 36));
+            dino1 = new Vector2(60, 35);
+            dino2 = new Vector2(440, 370);
+            dino3 = new Vector2(440, 40);
+            dino4 = new Vector2(46, 375);
         }
         protected override void Update(GameTime gameTime)
         {
             previousState = keyboardState;
             keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.D) && previousState.IsKeyUp(Keys.D))
+            {
+                randomDino = generator.Next(1, 5);
+                this.Window.Title = $"The Random Dino is {randomDino}";
+            }
             if (keyboardState.IsKeyDown(Keys.R))
             {
-                random = new Vector2(generator.Next(0, 500), generator.Next(0, 400));
+                switch (randomDino)
+                {
+                    case 1:
+                        dino3 = new Vector2(generator.Next(0, 500), generator.Next(0, 400));
+                        break;
+                    case 2:
+                        dino1 = new Vector2(generator.Next(0, 500), generator.Next(0, 400));
+                        break;
+                    case 3:
+                        dino2 = new Vector2(generator.Next(0, 500), generator.Next(0, 400));
+                        break;
+                    case 4:
+                        dino4 = new Vector2(generator.Next(0, 500), generator.Next(0, 400));
+                        break;
+                }
                 visible = false;
             }
             if (keyboardState.IsKeyDown(Keys.Space) & previousState.IsKeyUp(Keys.Space))
@@ -65,25 +87,24 @@ namespace Monogame___1_
                 {
                     _window = Content.Load<Texture2D>("4PanelWindow2 (1)");
                     backgroundImage++;
-                }         
+                }
                 else
                 {
                     _window = Content.Load<Texture2D>("4PanelWindow (1)");
                     backgroundImage--;
                 }
-                
             }
             base.Update(gameTime);
         }
         protected override void Draw(GameTime gameTime)
-        {            
+        {
             GraphicsDevice.Clear(Color.White);
             _spriteBatch.Begin();
-            _spriteBatch.Draw(_window, new Vector2(-1,0), Color.White);          
-            _spriteBatch.Draw(_dino2, new Vector2(440, 370), Color.White);
-            _spriteBatch.Draw(_dino3, new Vector2(440, 40), Color.White);
-            _spriteBatch.Draw(_dino4, new Vector2(46, 375), Color.White);
-            _spriteBatch.Draw(_dino, random, Color.White);
+            _spriteBatch.Draw(_window, new Vector2(-1,0), Color.White);
+            _spriteBatch.Draw(_dino2, dino2, Color.White);
+            _spriteBatch.Draw(_dino3, dino3, Color.White);
+            _spriteBatch.Draw(_dino4, dino4, Color.White);
+            _spriteBatch.Draw(_dino, dino1, Color.White);
             if (visible)
                 _spriteBatch.DrawString(_text, "Press R to randomize one of the Dinosaurs", new Vector2(90, 0), Color.Black);
             _spriteBatch.End();
