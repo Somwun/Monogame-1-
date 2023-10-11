@@ -16,7 +16,8 @@ namespace Monogame___1_
         private Texture2D _dino5;
         private SpriteFont _text;
         private Texture2D _window;
-        private bool visible = true;
+        private bool visible = true, update = true;
+        private KeyboardState previousState, keyboardState;
         private int backgroundImage;
         Random generator = new Random();
         private Vector2 random;
@@ -51,17 +52,26 @@ namespace Monogame___1_
         }
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-            if (Keyboard.GetState().IsKeyDown(Keys.R))
+            previousState = keyboardState;
+            keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.R))
             {
                 random = new Vector2(generator.Next(0, 500), generator.Next(0, 400));
                 visible = false;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            if (keyboardState.IsKeyDown(Keys.Space) & previousState.IsKeyUp(Keys.Space))
             {
-                random = new Vector2(generator.Next(0, 500), generator.Next(0, 400));
-                visible = false;
+                if (backgroundImage == 1)
+                {
+                    _window = Content.Load<Texture2D>("4PanelWindow2 (1)");
+                    backgroundImage++;
+                }         
+                else
+                {
+                    _window = Content.Load<Texture2D>("4PanelWindow (1)");
+                    backgroundImage--;
+                }
+                
             }
             base.Update(gameTime);
         }
