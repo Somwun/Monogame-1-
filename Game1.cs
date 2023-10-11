@@ -9,12 +9,8 @@ namespace Monogame___1_
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _dino;
-        private Texture2D _dino2;
-        private Texture2D _dino3;
-        private Texture2D _dino4;
+        private Texture2D _dino, _dino2, _dino3, _dino4, _window;
         private SpriteFont _text;
-        private Texture2D _window;
         private bool visible = true, update = true;
         private KeyboardState previousState, keyboardState;
         private Vector2 dino1, dino2, dino3, dino4;
@@ -57,11 +53,6 @@ namespace Monogame___1_
         {
             previousState = keyboardState;
             keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.D) && previousState.IsKeyUp(Keys.D))
-            {
-                randomDino = generator.Next(1, 5);
-                this.Window.Title = $"The Random Dino is {randomDino}";
-            }
             if (keyboardState.IsKeyDown(Keys.R))
             {
                 switch (randomDino)
